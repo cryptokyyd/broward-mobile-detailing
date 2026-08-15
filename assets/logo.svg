@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 64" width="300" height="64">
+  <title>Broward Mobile Detailing</title>
+  <path d="M32 6c9 11 15 18.5 15 25.5A15 15 0 0 1 17 31.5C17 24.5 23 17 32 6Z" fill="#2f57c9"/>
+  <rect x="6" y="49" width="52" height="4" rx="2" fill="#22252f"/>
+  <rect x="14" y="57" width="36" height="3" rx="1.5" fill="#22252f" opacity=".45"/>
+  <text x="72" y="31" font-family="'Clash Display',Helvetica,Arial,sans-serif" font-size="21" font-weight="600" fill="#22252f">Broward</text>
+  <text x="72" y="53" font-family="'Clash Display',Helvetica,Arial,sans-serif" font-size="21" font-weight="600" fill="#2f57c9">Detailing</text>
+</svg>

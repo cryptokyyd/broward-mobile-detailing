@@ -1,0 +1,11 @@
+{
+  "name": "broward-mobile-detailing",
+  "private": true,
+  "type": "module",
+  "description": "Static lead-generation site. The only JS that runs on a server is api/lead.js.",
+  "scripts": {
+    "build": "python build-pages.py",
+    "dev": "python -m http.server 4400",
+    "test": "node api/lead.test.mjs"
+  }
+}
