@@ -846,3 +846,38 @@ body.nav-open .sticky-cta { display: none; }
    button you can read. */
 .btn--flare { background: var(--flare); color: var(--steel-deep); }
 .btn--flare:hover { background: var(--flare-d); color: var(--steel-deep); }
+
+/* ---------- Optional imagery ----------
+   Every rule here degrades to the design as it was before the photographs
+   existed. Backgrounds, not <img>: a missing file leaves the graphite ground
+   showing rather than a broken-image icon, so the site is never worse for
+   having a slot unfilled. All of it is decorative — the headings and copy
+   carry the meaning — so nothing here needs alt text.
+
+   Paths resolve relative to THIS stylesheet, so the /es/ pages get the same
+   images without a second set of rules. */
+.hero {
+  background-image:
+    linear-gradient(to right, oklch(0.175 0.022 260 / 0.94) 0%, oklch(0.175 0.022 260 / 0.72) 45%, oklch(0.175 0.022 260 / 0.35) 100%),
+    url('assets/media/hero-beading.png');
+  background-size: cover, cover;
+  background-position: center, 60% 45%;
+  background-repeat: no-repeat;
+}
+/* The gradient above already darkens the left where the headline sits; the
+   existing scrim would double up and flatten the photo entirely. */
+.hero__scrim { opacity: 0.35; }
+
+/* Tiles carry their image inline (see build-pages.py) — this just makes it
+   behave, and keeps the copy legible over a photograph. */
+.tile {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.tile::after {
+  background: linear-gradient(to top,
+    oklch(0.175 0.022 260 / 0.94) 6%,
+    oklch(0.175 0.022 260 / 0.62) 48%,
+    oklch(0.175 0.022 260 / 0.30) 100%);
+}

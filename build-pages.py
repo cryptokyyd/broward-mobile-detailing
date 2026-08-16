@@ -32,6 +32,7 @@ BRAND = "Broward Mobile Detailing"
 # fastest way to burn trust on the phone.
 SERVICES = [
     dict(
+        media="svc-full.png",
         slug="full-detail-broward", slug_es="detallado-completo-broward",
         nav="Full detail", nav_es="Detallado completo",
         name="Full Mobile Detail", name_es="Detallado completo a domicilio",
@@ -68,6 +69,7 @@ SERVICES = [
         ],
     ),
     dict(
+        media="svc-interior.png",
         slug="interior-detailing-broward", slug_es="limpieza-de-interiores-broward",
         nav="Interior detail", nav_es="Interiores",
         name="Interior Deep Clean", name_es="Limpieza profunda de interiores",
@@ -104,6 +106,7 @@ SERVICES = [
         ],
     ),
     dict(
+        media="svc-exterior.png",
         slug="exterior-detailing-broward", slug_es="detallado-exterior-broward",
         nav="Exterior detail", nav_es="Exterior",
         name="Exterior Detail &amp; Wax", name_es="Detallado exterior y cera",
@@ -140,6 +143,7 @@ SERVICES = [
         ],
     ),
     dict(
+        media="svc-ceramic.png",
         slug="ceramic-coating-broward", slug_es="recubrimiento-ceramico-broward",
         nav="Ceramic coating", nav_es="Cerámico",
         name="Ceramic Coating", name_es="Recubrimiento cerámico",
@@ -176,6 +180,7 @@ SERVICES = [
         ],
     ),
     dict(
+        media="svc-correction.png",
         slug="paint-correction-broward", slug_es="pulido-de-pintura-broward",
         nav="Paint correction", nav_es="Pulido",
         name="Paint Correction", name_es="Corrección y pulido de pintura",
@@ -212,6 +217,7 @@ SERVICES = [
         ],
     ),
     dict(
+        media="svc-headlight.png",
         slug="headlight-restoration-broward", slug_es="restauracion-de-faros-broward",
         nav="Headlight restoration", nav_es="Faros",
         name="Headlight Restoration", name_es="Restauración de faros",
@@ -1102,7 +1108,18 @@ def home(es):
         sub = ("Mobile detailing across all of Broward County. We bring our own water and power. "
                "You get the whole price by text — no visit, no surprises.")
 
-    tiles = "\n".join(f'''        <a class="tile{' tile--wide' if i == 0 else ''}" href="{(s["slug_es"] if es else s["slug"])}.html">
+    # Imagery is a CSS background, not an <img>, and that is deliberate: if the
+    # file is not there the graphite ground simply shows through, where a
+    # missing <img> would render a broken-image icon on the home page. It is
+    # decorative — the tile's real content is the heading and the text — so
+    # there is no alt text to lose. Drop the files in and they appear; no
+    # regeneration required.
+    def tile_bg(s):
+        m = s.get("media")
+        return (f' style="background-image:url(\'{"../" if es else ""}assets/media/{m}\')"'
+                if m else '')
+
+    tiles = "\n".join(f'''        <a class="tile{' tile--wide' if i == 0 else ''}" href="{(s["slug_es"] if es else s["slug"])}.html"{tile_bg(s)}>
           <h3>{s["nav_es"] if es else s["nav"]}</h3>
           <p>{s["lede_es"] if es else s["lede"]}</p>
         </a>''' for i, s in enumerate(SERVICES[:6]))
