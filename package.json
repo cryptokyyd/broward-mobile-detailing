@@ -6,6 +6,6 @@
   "scripts": {
     "pages": "python build-pages.py",
     "dev": "python -m http.server 4400",
-    "test": "node api/lead.test.mjs"
+    "test": "node --test api/lead.test.mjs api/voice.test.mjs"
   }
 }

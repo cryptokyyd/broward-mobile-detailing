@@ -16,10 +16,61 @@ const BMD = {
   whatsapp: '19545550147',        // international format, digits only, for wa.me
   phone:    '(954) 555-0147',
   email:    'quotes@browardcardetailing.com',
-  instagram: ''                   // '' hides the Instagram link in the footer
+  instagram: '',                  // '' hides the Instagram link in the footer
+
+  /* Call tracking. One Twilio number per channel: whichever number rings
+     tells you which channel produced the call, with no dashboard involved.
+     Buy a number, point it at /api/voice, and paste it here as the display
+     format you want shown. Leave a channel '' and it falls back to .phone.
+
+     The number in .phone above is the one crawlers and direct visitors see,
+     so keep that one stable — it is what ends up in search results. */
+  tracking: {
+    google:   '',                 // ?utm_source=google  (and gclid)
+    facebook: '',                 // ?utm_source=facebook (and fbclid)
+    bing:     '',
+    yelp:     ''
+  }
 };
 
 document.documentElement.classList.add('js');
+
+/* ------------------------------------------------------------------
+   1b. Resolve the tracking number BEFORE anything wires a phone link.
+
+   Runs ahead of the contact block on purpose: once [data-tel] hrefs are
+   written, swapping the number would mean rewriting them all again. Reads
+   the URL first (a first landing has no stored attribution yet), then falls
+   back to what an earlier page view stored.
+   ------------------------------------------------------------------ */
+(function trackingNumber() {
+  var numbers = BMD.tracking || {};
+  if (!Object.keys(numbers).some(function (k) { return numbers[k]; })) return;
+
+  function sourceFromQuery() {
+    var q = new URLSearchParams(location.search);
+    var s = (q.get('utm_source') || '').toLowerCase();
+    if (s) return s;
+    // Ad platforms often send only their click id, with no utm_source.
+    if (q.get('gclid')) return 'google';
+    if (q.get('fbclid')) return 'facebook';
+    return '';
+  }
+
+  function sourceFromStorage() {
+    try {
+      var a = JSON.parse(sessionStorage.getItem('bmd-attr') || '{}');
+      return (a.utm_source || (a.gclid ? 'google' : a.fbclid ? 'facebook' : '') || '').toLowerCase();
+    } catch (e) { return ''; }
+  }
+
+  var source = sourceFromQuery() || sourceFromStorage();
+  var swap = source && numbers[source];
+  if (!swap) return;
+
+  BMD.phone = swap;
+  BMD.whatsapp = '1' + swap.replace(/\D/g, '').slice(-10);
+})();
 
 /* ------------------------------------------------------------------
    2. Wire contact config into the page

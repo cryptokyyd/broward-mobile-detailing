@@ -108,6 +108,65 @@ attempted, and the lead is accepted if at least one succeeds.
 The fastest working setup: a Zapier catch hook into a Google Sheet, plus an SMS
 to yourself. Ninety seconds, and you stop losing leads.
 
+## Call tracking (Twilio)
+
+`api/voice.js` turns a Twilio number into a tracked line: it announces the
+recording, connects the caller to your real phone, and logs the call through
+the same `deliver()` path as the quote form. Calls and form fills land in one
+place, in one shape.
+
+### Setup
+
+1. Buy a **954 or 754** number at twilio.com (~$1.15/mo). A Broward area code
+   is a trust signal on a site that sells Broward.
+2. Set the number's **"A call comes in"** webhook to
+   `https://browardcardetailing.com/api/voice`, method **HTTP POST**.
+3. Set these environment variables in Vercel:
+
+| Variable | Needed | What it does |
+|---|---|---|
+| `TWILIO_AUTH_TOKEN` | **Required** | Validates the webhook signature. Without it the endpoint refuses every call |
+| `FORWARD_TO_NUMBER` | **Required** | Your real phone, E.164 (`+17865572897`) |
+| `RECORD_CALLS` | Optional | `false` turns off recording *and* the announcement |
+| `DIAL_TIMEOUT` | Optional | Seconds to ring before giving up (default 20) |
+
+`TWILIO_AUTH_TOKEN` is not optional and the code fails closed without it. An
+unauthenticated voice webhook is a way for a stranger to place calls on your
+balance — `api/voice.test.mjs` covers the signature check specifically.
+
+### ⚖️ Florida is an all-party consent state
+
+Fla. Stat. § 934.03 makes it a **criminal offence** to record a call without
+the consent of every party. The `<Say>` notice in `api/voice.js` is what makes
+the recording lawful — continuing the call after a clear notice is treated as
+consent. **Do not remove it while recording is on.** Setting
+`RECORD_CALLS=false` removes both together, which is also fine; what is not
+fine is recording silently.
+
+This matters more than usual here, because call recordings are exactly what
+you will want to show a detailer to prove lead quality.
+
+### Attribution by number
+
+`BMD.tracking` in `main.js` maps a traffic source to its own number:
+
+```js
+tracking: {
+  google:   '(954) 111-2222',
+  facebook: '(754) 333-4444',
+  bing:     '',
+  yelp:     ''
+}
+```
+
+The site swaps the displayed number based on `utm_source`, or on `gclid` /
+`fbclid` when an ad platform sends only a click id. Whichever number rings
+tells you which channel produced the call — no dashboard, no third-party
+script. Leave an entry `''` and that channel falls back to `BMD.phone`.
+
+Keep `BMD.phone` itself stable: it is the number crawlers see and the one that
+ends up in search results. Direct and organic visitors always get that one.
+
 ### What a lead looks like
 
 ```json
