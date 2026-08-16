@@ -32,6 +32,17 @@ and a Spanish home. 65 HTML files, 65 URLs in `sitemap.xml`.
 
 ## Before this goes live — the blockers
 
+> ### ⚠️ The site is currently `noindex`, on purpose
+>
+> `vercel.json` sends `X-Robots-Tag: noindex, nofollow` on every path, so
+> Google will not index a site advertising the placeholder number
+> `(954) 555-0147`. A test number in live search results is genuinely painful
+> to undo.
+>
+> **To launch: delete the `/(.*)` block from `headers` in `vercel.json` and
+> push.** Do that only once item 1 below is done. It is the last step, not
+> the first.
+
 These are in order. The first three are genuine blockers; nothing should get
 ad spend until they are done.
 

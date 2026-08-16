@@ -717,8 +717,11 @@ def quote_strip(es, preset="", city=""):
         ph_name, ph_phone, ph_veh = "Your name", "(954) 555-0147", "e.g. 2021 Toyota Camry"
         btn, fine = "Send me my price", "We reply the same day. We never sell your information."
 
+    # NOT html.escape()'d: the nav labels in SERVICES are already HTML source
+    # ("Fleet &amp; commercial"), so escaping here produced &amp;amp; and the
+    # submitted value arrived as the literal "Fleet &amp; commercial".
     opts = "\n".join(
-        f'            <option value="{html.escape(s["nav_es"] if es else s["nav"], quote=True)}"'
+        f'            <option value="{s["nav_es"] if es else s["nav"]}"'
         f'{" selected" if s["slug"] == preset else ""}>{s["nav_es"] if es else s["nav"]}</option>'
         for s in SERVICES)
     city_opts = "\n".join(
@@ -800,8 +803,10 @@ def ld_service(s, es):
     price = s["price_from"]
     offer = (f',"offers":{{"@type":"Offer","price":"{price}","priceCurrency":"USD",'
              f'"availability":"https://schema.org/InStock"}}') if price else ""
+    # json_str, not html.escape: this sits inside JSON, where the escaping rules
+    # are JSON's. HTML-escaping a quote here would emit &quot; into a JSON string.
     return f'''<script type="application/ld+json">
-{{"@context":"https://schema.org","@type":"Service","serviceType":"{html.escape(name.replace("&amp;", "and"), quote=True)}",
+{{"@context":"https://schema.org","@type":"Service","serviceType":{json_str(name)},
 "provider":{{"@type":"AutoDetailing","name":"{BRAND}","telephone":"+1-954-555-0147",
 "areaServed":{{"@type":"AdministrativeArea","name":"Broward County, Florida"}}}}{offer}}}
 </script>
