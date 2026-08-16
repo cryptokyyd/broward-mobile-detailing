@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://browardmobiledetailing.com/sitemap.xml
+Sitemap: https://browardcardetailing.com/sitemap.xml

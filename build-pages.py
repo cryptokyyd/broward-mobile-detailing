@@ -22,7 +22,7 @@ If you add a city, write it real copy or do not add it.
 """
 import pathlib, html, datetime
 
-BASE = "https://browardmobiledetailing.com"   # ← the one place the domain lives
+BASE = "https://browardcardetailing.com"   # ← the one place the domain lives
 OUT = pathlib.Path(__file__).parent
 BRAND = "Broward Mobile Detailing"
 
@@ -653,7 +653,7 @@ def footer(es):
           <h4>{h_co}</h4>
           <ul>
             <li><a data-tel="text" href="tel:+19545550147">(954) 555-0147</a></li>
-            <li><a data-email="text" href="mailto:quotes@browardmobiledetailing.com">quotes@browardmobiledetailing.com</a></li>
+            <li><a data-email="text" href="mailto:quotes@browardcardetailing.com">quotes@browardcardetailing.com</a></li>
             <li><a href="{root}contact.html">{'Pedir cotización' if es else 'Get a quote'}</a></li>
           </ul>
         </div>
@@ -1365,7 +1365,7 @@ def contact_page():
           </div>
           <div class="rail__item">
             <span class="rail__label">Email</span>
-            <a class="rail__value" data-email="text" href="mailto:quotes@browardmobiledetailing.com">quotes@browardmobiledetailing.com</a>
+            <a class="rail__value" data-email="text" href="mailto:quotes@browardcardetailing.com">quotes@browardcardetailing.com</a>
           </div>
           <div class="rail__item">
             <span class="rail__label">Hours</span>

@@ -15,7 +15,7 @@
 const BMD = {
   whatsapp: '19545550147',        // international format, digits only, for wa.me
   phone:    '(954) 555-0147',
-  email:    'quotes@browardmobiledetailing.com',
+  email:    'quotes@browardcardetailing.com',
   instagram: ''                   // '' hides the Instagram link in the footer
 };
 

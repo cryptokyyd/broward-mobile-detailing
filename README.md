@@ -49,7 +49,7 @@ ad spend until they are done.
 1. **The phone number and email are fake.** `(954) 555-0147` is a reserved
    test number and it is on every page. Change `BMD.phone`, `BMD.whatsapp` and
    `BMD.email` at the top of `main.js`, then search-replace `+19545550147`,
-   `(954) 555-0147` and `quotes@browardmobiledetailing.com` across the HTML and
+   `(954) 555-0147` and `quotes@browardcardetailing.com` across the HTML and
    in `build-pages.py` — they are hard-coded as `href` fallbacks so the buttons
    still work with JavaScript disabled. Regenerate after editing the script.
 
@@ -74,11 +74,20 @@ ad spend until they are done.
    **before** launch — a lead that arrives expecting $199 and gets quoted $340
    is a lead that gets refunded and a buyer you lose.
 
-5. **The domain.** Every canonical URL and the sitemap point at
-   `https://browardmobiledetailing.com`. That is the one you bought — of the
-   variants I checked, it is the only one already registered. If it is actually
-   a different one, change `BASE` at the top of `build-pages.py` and rerun.
-   Getting this wrong tells Google to index a hostname that does not resolve.
+5. **The domain — `browardcardetailing.com`.** Every canonical URL, the
+   `sitemap.xml` and `robots.txt` point there, from the single `BASE` constant
+   at the top of `build-pages.py`. Change it there and rerun; never edit the
+   generated HTML by hand.
+
+   Registration and DNS still have to be finished. Until the domain resolves
+   and is attached to the Vercel project, these canonicals point at a hostname
+   that does not answer — which is harmless only because the site is `noindex`
+   (see the box above). Do not lift the `noindex` before the domain resolves.
+
+   *(An earlier draft targeted `browardmobiledetailing.com`. That one is
+   registered to someone else; `browardcardetailing.com` was available and is
+   the one we went with — "car detailing" also carries more search volume than
+   "mobile detailing".)*
 
 6. **Business facts to confirm or remove.** "Mon–Sat, 8am–6pm" on
    `contact.html` and the twelve-month headlight guarantee are assumptions.
