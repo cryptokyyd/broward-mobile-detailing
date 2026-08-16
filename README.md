@@ -146,17 +146,31 @@ Vercel, connected to this repository. `vercel.json` sets `cleanUrls`, so
 form, and the two must not drift apart or every sitemap entry becomes a
 redirect.
 
-The site is currently a subdirectory of the `luxsea-miami` repository. To split
-it into its own repo, create an empty one on GitHub and then:
+**There is deliberately no `build` script in `package.json`.** The generator is
+`npm run pages`, and that name is load bearing: Vercel auto-runs any script
+called `build`, then fails the deploy hunting for a `public/` directory that a
+site of committed HTML never produces. That exact error killed the first
+deploy. `outputDirectory: "."` in `vercel.json` states the same thing a second
+way — the site *is* the repo root, there is no build output.
+
+Regenerate pages locally and commit the result. That keeps the deploy a plain
+file copy with no dependency on Python being present in Vercel's build image.
+
+<details>
+<summary>How this repo was split out of <code>luxsea-miami</code> (historical)</summary>
+
+The site began as a subdirectory of the `luxsea-miami` repository and was
+moved with:
 
 ```bash
 git subtree split --prefix=broward-mobile-detailing -b broward-only
 git push git@github.com:<you>/broward-mobile-detailing.git broward-only:main
 ```
 
-That carries the commit history across. In the meantime it deploys as-is by
-setting **Root Directory** to `broward-mobile-detailing` in the Vercel project
-settings.
+That carried the commit history across, which is why the first commit here
+predates the repository.
+
+</details>
 
 ## What was reused
 
