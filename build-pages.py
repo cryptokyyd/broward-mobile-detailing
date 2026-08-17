@@ -32,7 +32,7 @@ BRAND = "Broward Mobile Detailing"
 # fastest way to burn trust on the phone.
 SERVICES = [
     dict(
-        media="svc-full.png",
+        media="mk-full.svg",
         slug="full-detail-broward", slug_es="detallado-completo-broward",
         nav="Full detail", nav_es="Detallado completo",
         name="Full Mobile Detail", name_es="Detallado completo a domicilio",
@@ -69,7 +69,7 @@ SERVICES = [
         ],
     ),
     dict(
-        media="svc-interior.png",
+        media="mk-interior.svg",
         slug="interior-detailing-broward", slug_es="limpieza-de-interiores-broward",
         nav="Interior detail", nav_es="Interiores",
         name="Interior Deep Clean", name_es="Limpieza profunda de interiores",
@@ -106,7 +106,7 @@ SERVICES = [
         ],
     ),
     dict(
-        media="svc-exterior.png",
+        media="mk-exterior.svg",
         slug="exterior-detailing-broward", slug_es="detallado-exterior-broward",
         nav="Exterior detail", nav_es="Exterior",
         name="Exterior Detail &amp; Wax", name_es="Detallado exterior y cera",
@@ -143,7 +143,7 @@ SERVICES = [
         ],
     ),
     dict(
-        media="svc-ceramic.png",
+        media="mk-ceramic.svg",
         slug="ceramic-coating-broward", slug_es="recubrimiento-ceramico-broward",
         nav="Ceramic coating", nav_es="Cerámico",
         name="Ceramic Coating", name_es="Recubrimiento cerámico",
@@ -180,7 +180,7 @@ SERVICES = [
         ],
     ),
     dict(
-        media="svc-correction.png",
+        media="mk-correction.svg",
         slug="paint-correction-broward", slug_es="pulido-de-pintura-broward",
         nav="Paint correction", nav_es="Pulido",
         name="Paint Correction", name_es="Corrección y pulido de pintura",
@@ -217,7 +217,7 @@ SERVICES = [
         ],
     ),
     dict(
-        media="svc-headlight.png",
+        media="mk-headlight.svg",
         slug="headlight-restoration-broward", slug_es="restauracion-de-faros-broward",
         nav="Headlight restoration", nav_es="Faros",
         name="Headlight Restoration", name_es="Restauración de faros",

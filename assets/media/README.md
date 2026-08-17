@@ -1,6 +1,20 @@
 # assets/media
 
-Image slots the site will use if the files are present, and silently skip if
+## What is here now
+
+`make-art.py` at the repo root generates all of it — vector, hand-authored,
+deterministic (fixed seed, so a rerun is a no-op in the diff).
+
+| File | Where |
+|---|---|
+| `hero-beads.svg` | Home hero — water beaded on a dark panel |
+| `mk-*.svg` | Tile watermarks, one per service |
+
+Total weight: ~40 KB for the lot, sharp at any resolution.
+
+## Replacing it with photography
+
+Slots the site uses if the files are present, and silently skips if
 they are not. They are CSS backgrounds, so a missing file leaves the graphite
 ground showing rather than a broken-image icon — the page is never worse for
 an empty slot, and nothing needs regenerating when you drop files in.

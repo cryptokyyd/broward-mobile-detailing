@@ -356,14 +356,17 @@ a { color: inherit; }
 .hero__scrim {
   position: absolute; inset: 0; z-index: -1;
   background:
-    linear-gradient(185deg, oklch(0.165 0.035 208 / 0.62) 0%, oklch(0.165 0.035 208 / 0.18) 42%, oklch(0.165 0.035 208 / 0.88) 100%),
-    radial-gradient(72% 58% at 76% 30%, oklch(0.70 0.19 45 / 0.42) 0%, transparent 68%);
+    linear-gradient(185deg, oklch(0.175 0.022 260 / 0.60) 0%, oklch(0.175 0.022 260 / 0.16) 42%, oklch(0.175 0.022 260 / 0.86) 100%),
+    radial-gradient(72% 58% at 76% 30%, oklch(0.62 0.15 248 / 0.34) 0%, transparent 68%);
 }
-/* slow sun drift — atmosphere, not decoration */
+/* Slow drift — atmosphere, not decoration.
+   Cool, not the warm sun this was inherited from: the amber Call button is the
+   only warm thing on the page, and that is exactly what makes it pull the eye.
+   A warm glow behind it competes with the one element meant to be clicked. */
 .hero__glow {
   position: absolute; z-index: -1; inset: auto -10% 22% auto;
   width: min(52vw, 620px); aspect-ratio: 1;
-  background: radial-gradient(circle, oklch(0.815 0.14 62 / 0.36) 0%, transparent 62%);
+  background: radial-gradient(circle, oklch(0.66 0.16 245 / 0.38) 0%, transparent 62%);
   filter: blur(18px);
   animation: drift 26s var(--ease-q) infinite alternate;
 }
@@ -379,10 +382,10 @@ a { color: inherit; }
 }
 .hero h1 { color: #fff; max-width: 15ch; letter-spacing: -0.013em; }
 .hero h1 .sun { color: var(--gloss-hi); }
-.hero__sub { font-size: var(--step-1); line-height: 1.5; max-width: 40ch; color: oklch(0.94 0.01 60); }
+.hero__sub { font-size: var(--step-1); line-height: 1.5; max-width: 40ch; color: oklch(0.94 0.008 250); }
 .hero__meta {
   display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-4);
-  font-size: var(--step--1); color: oklch(0.90 0.012 60);
+  font-size: var(--step--1); color: oklch(0.90 0.010 250);
   border-top: 1px solid rgb(255 255 255 / 0.25); padding-top: var(--sp-3);
   margin-top: var(--sp-2);
 }
@@ -550,7 +553,7 @@ a.rail__value:hover { color: var(--brand); }
 .tile:hover img { transform: scale(1.06); }
 .tile h3 { font-size: var(--step-2); color: #fff; }
 .tile__es { color: var(--gloss-hi); font-family: var(--font-display); font-weight: 500; font-size: var(--step-0); }
-.tile p { color: oklch(0.92 0.01 60); font-size: var(--step--1); margin-top: 0.35rem; max-width: 40ch; }
+.tile p { color: oklch(0.92 0.008 250); font-size: var(--step--1); margin-top: 0.35rem; max-width: 40ch; }
 .tile--wide h3 { font-size: var(--step-3); }
 
 /* ---------- What's included ----------
@@ -588,7 +591,7 @@ a.rail__value:hover { color: var(--brand); }
 }
 .row h3 { font-size: var(--step-2); }
 .row p { color: var(--muted); }
-.band--drench .row p { color: oklch(0.94 0.02 50); }
+.band--drench .row p { color: oklch(0.94 0.014 250); }
 .band--steel .row p { color: var(--shell-dim); }
 
 /* ---------- Coverage zones ---------- */
@@ -631,7 +634,7 @@ a.rail__value:hover { color: var(--brand); }
 /* ---------- CTA band ---------- */
 .cta-final { text-align: center; display: grid; gap: var(--sp-4); justify-items: center; }
 .cta-final h2 { max-width: 16ch; }
-.cta-final p { max-width: 46ch; color: oklch(0.94 0.02 50); }
+.cta-final p { max-width: 46ch; color: oklch(0.94 0.014 250); }
 
 /* ---------- Footer ---------- */
 .site-foot { background: var(--steel-deep); color: var(--shell-dim); padding-block: var(--sp-6) var(--sp-4); }
@@ -847,37 +850,55 @@ body.nav-open .sticky-cta { display: none; }
 .btn--flare { background: var(--flare); color: var(--steel-deep); }
 .btn--flare:hover { background: var(--flare-d); color: var(--steel-deep); }
 
-/* ---------- Optional imagery ----------
-   Every rule here degrades to the design as it was before the photographs
-   existed. Backgrounds, not <img>: a missing file leaves the graphite ground
-   showing rather than a broken-image icon, so the site is never worse for
-   having a slot unfilled. All of it is decorative — the headings and copy
-   carry the meaning — so nothing here needs alt text.
+/* ---------- Artwork ----------
+   Vector, not photography. An SVG is a few KB, stays sharp on any display,
+   and — unlike a stock photo of somebody else's car — is honestly ours.
+   Real job photographs replace this the day they exist; see
+   assets/media/README.md, and note the before/after frames stay empty until
+   those photographs are real.
 
-   Paths resolve relative to THIS stylesheet, so the /es/ pages get the same
-   images without a second set of rules. */
+   Paths resolve relative to THIS stylesheet, so /es/ pages need no second set
+   of rules. Every rule degrades to the flat graphite ground if a file is
+   missing. */
 .hero {
   background-image:
-    linear-gradient(to right, oklch(0.175 0.022 260 / 0.94) 0%, oklch(0.175 0.022 260 / 0.72) 45%, oklch(0.175 0.022 260 / 0.35) 100%),
-    url('assets/media/hero-beading.png');
+    linear-gradient(to right,
+      oklch(0.175 0.022 260 / 0.93) 0%,
+      oklch(0.175 0.022 260 / 0.68) 42%,
+      oklch(0.175 0.022 260 / 0.22) 100%),
+    url('assets/media/hero-beads.svg');
   background-size: cover, cover;
-  background-position: center, 60% 45%;
+  background-position: center, center;
   background-repeat: no-repeat;
 }
-/* The gradient above already darkens the left where the headline sits; the
-   existing scrim would double up and flatten the photo entirely. */
-.hero__scrim { opacity: 0.35; }
+/* The stock scrim would stack with the gradient above and flatten the beads. */
+.hero__scrim { opacity: 0.28; }
 
-/* Tiles carry their image inline (see build-pages.py) — this just makes it
-   behave, and keeps the copy legible over a photograph. */
+/* Tile marks: oversized line art, bottom-right, cropped by the tile edge so it
+   reads as a watermark rather than a centred icon. Sits under the gradient and
+   therefore under the copy. */
 .tile {
-  background-size: cover;
-  background-position: center;
   background-repeat: no-repeat;
+  /* Top-right, because the tile's copy is bottom-aligned. Anchoring the mark
+     opposite the text is what keeps it from crossing the heading — which is
+     exactly what it did when it sat bottom-right. */
+  background-position: right -14px top -12px;
+  background-size: auto 58%;
+  transition: background-size .7s var(--ease), background-position .7s var(--ease);
 }
+@media (min-width: 900px) {
+  /* The wide tile has room the others do not, so its mark can be larger and
+     sit in the open middle-right rather than tucked in a corner. */
+  .tile--wide { background-size: auto 56%; background-position: right 6% center; }
+}
+.tile:hover { background-size: auto 64%; background-position: right -6px top -8px; }
+@media (min-width: 900px) {
+  .tile--wide:hover { background-size: auto 60%; background-position: right 5% center; }
+}
+@media (prefers-reduced-motion: reduce) { .tile { transition: none; } }
 .tile::after {
   background: linear-gradient(to top,
-    oklch(0.175 0.022 260 / 0.94) 6%,
-    oklch(0.175 0.022 260 / 0.62) 48%,
-    oklch(0.175 0.022 260 / 0.30) 100%);
+    oklch(0.175 0.022 260 / 0.93) 4%,
+    oklch(0.175 0.022 260 / 0.55) 52%,
+    oklch(0.175 0.022 260 / 0.18) 100%);
 }
