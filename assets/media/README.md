@@ -7,10 +7,30 @@ deterministic (fixed seed, so a rerun is a no-op in the diff).
 
 | File | Where |
 |---|---|
-| `hero-beads.svg` | Home hero — water beaded on a dark panel |
+| `hero-beads.svg` | Landscape — home hero, and the opening band of all 64 other pages |
+| `hero-beads-tall.svg` | Portrait — the same bands under 700px |
 | `mk-*.svg` | Tile watermarks, one per service |
 
-Total weight: ~40 KB for the lot, sharp at any resolution.
+~190 KB raw, ~25 KB over the wire once the CDN compresses it (these are text
+and they gzip about 8:1), sharp at any resolution.
+
+Two orientations because `cover` on a tall narrow band scales the landscape
+file about 1.9x: a handful of enormous beads fill the screen and the rest of
+the field is never seen. The portrait file is drawn at roughly the shape it is
+displayed at, with smaller beads to survive the upscale.
+
+### The contrast floor
+
+The gradient over the artwork is not styling to taste — it is what keeps the
+type readable over a busy ground, and the numbers are measured rather than
+guessed. The binding constraint is `.trust__l`, the smallest type on the page,
+which runs the full width of the band and so meets the transparent end of the
+ramp. At the far stop it sits at 4.80:1 against the ground; WCAG AA wants 4.5.
+
+So: **lightening the far end of the `.hero` ramp past 0.42 alpha drops that
+below AA.** If you want more of the artwork showing, raise the bead count or
+lower the specular opacity in `make-art.py` instead — that adds texture
+without adding peak brightness.
 
 ## Replacing it with photography
 

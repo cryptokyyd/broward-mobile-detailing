@@ -27,14 +27,32 @@ GLOSS      = "#5fb7e0"
 GLOSS_HI   = "#9fd8ef"
 
 
-def beads(w=1400, h=800, n=110, seed=7):
-    """Water beaded on a dark panel, lit from the upper left.
+def beads(w=1400, h=800, n=330, seed=7, rmax=25.0, bias=True):
+    """Water beaded on dark paint, lit from the upper left.
 
-    Each bead is four pieces: a contact shadow, the body (a radial gradient
-    that brightens at the rim the way a real droplet lenses light), a specular
-    highlight up-left toward the key light, and a cooler bounce at the lower
-    right. Skipping any one of them is what makes CSS-blob 'droplets' read as
-    circles rather than water.
+    `bias` biases the field to the right and fades it out on the left, which is
+    what a landscape banner wants: the headline sits on the left third and
+    needs quiet there. Turn it off for the portrait variant, where the copy
+    spans the full width and there is no side to fade towards — that one wants
+    an even, fainter field instead. `rmax` caps bead size: a phone crops a far
+    smaller slice of the artwork, so its beads have to be drawn smaller to
+    survive being scaled up.
+
+    The hard part is not drawing circles, it is not drawing *bubbles*. A soap
+    bubble is large, evenly translucent, and ringed with light the whole way
+    round. A water bead on dark paint is the opposite on every count, and these
+    four cues are what separate them:
+
+      1. Scale and crowding. Beads are small and many — hundreds of tiny ones
+         with a scattering of large. A field of evenly large spheres is foam.
+      2. They are domes, not spheres. Surface tension against a contact angle
+         leaves them wider than they are tall, so each one is an ellipse.
+      3. The middle goes *darker*, not lighter. A bead is a lens, and what it
+         has to show is the dark paint underneath it.
+      4. The bright part is a crescent low on the bead, where light refracts
+         through and exits. That crescent is the strongest water cue there is,
+         and a full bright rim — which is what the first version drew — undoes
+         it by turning the bead straight back into a bubble.
     """
     rnd = random.Random(seed)
     parts = []
@@ -47,58 +65,87 @@ def beads(w=1400, h=800, n=110, seed=7):
     </linearGradient>
     <linearGradient id="sweep" x1="0" y1="1" x2="1" y2="0">
       <stop offset="0" stop-color="{BRAND}" stop-opacity="0"/>
-      <stop offset="0.5" stop-color="{BRAND}" stop-opacity="0.30"/>
-      <stop offset="1" stop-color="{GLOSS}" stop-opacity="0.10"/>
+      <stop offset="0.5" stop-color="{BRAND}" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="{GLOSS}" stop-opacity="0.09"/>
     </linearGradient>
-    <radialGradient id="bead" cx="0.38" cy="0.34" r="0.72">
-      <stop offset="0" stop-color="{GLOSS_HI}" stop-opacity="0.30"/>
-      <stop offset="0.45" stop-color="{GLOSS}" stop-opacity="0.13"/>
-      <stop offset="0.82" stop-color="{GLOSS_HI}" stop-opacity="0.42"/>
-      <stop offset="1" stop-color="#ffffff" stop-opacity="0.55"/>
+    <!-- The reflection band a curved panel throws. Without it the beads have
+         nothing to sit on and the whole field floats. -->
+    <linearGradient id="sheen" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0.30" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.50" stop-color="#ffffff" stop-opacity="0.055"/>
+      <stop offset="0.70" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Lens: a bright pinprick off-centre, darkening through the body, and
+         only a thin cool rim. The old version ended on white at 0.55, which is
+         precisely the bubble ring this is avoiding. -->
+    <radialGradient id="bead" cx="0.36" cy="0.31" r="0.80">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.13"/>
+      <stop offset="0.42" stop-color="#000000" stop-opacity="0.20"/>
+      <stop offset="0.86" stop-color="#000000" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="{GLOSS_HI}" stop-opacity="0.26"/>
     </radialGradient>
     <radialGradient id="shadow" cx="0.5" cy="0.5" r="0.5">
-      <stop offset="0" stop-color="#000000" stop-opacity="0.55"/>
+      <stop offset="0" stop-color="#000000" stop-opacity="0.42"/>
       <stop offset="1" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
-    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="1.1"/>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="0.7"/>
+    </filter>
+    <!-- The crescent needs far more blur than the specular. Sharp, it reads as
+         a pale disc sitting inside the bead rather than light leaving it. -->
+    <filter id="melt" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2.2"/>
     </filter>
   </defs>''')
 
     parts.append(f'<rect width="{w}" height="{h}" fill="url(#panel)"/>')
-    # A broad diagonal sheen, so the panel reads as curved metal not flat card.
     parts.append(f'<rect width="{w}" height="{h}" fill="url(#sweep)"/>')
+    parts.append(f'<rect width="{w}" height="{h}" fill="url(#sheen)"/>')
 
     drops = []
     for _ in range(n):
-        # Bias right: the headline sits on the left third and wants quiet there.
-        x = w * (rnd.random() ** 0.62)
-        y = rnd.uniform(0.04, 0.99) * h
-        r = rnd.choice([4, 5, 6, 7, 9, 11, 14, 17, 21, 26, 32, 38, 44])
-        r *= rnd.uniform(0.82, 1.18)
-        # Left-edge beads fade out so they never fight the type.
-        edge = min(1.0, (x / (w * 0.42)) ** 1.4)
-        op = round(rnd.uniform(0.5, 1.0) * (0.25 + 0.75 * edge), 3)
+        x = w * (rnd.random() ** 0.62) if bias else rnd.random() * w
+        y = rnd.uniform(0.03, 0.99) * h
+        # A power law rather than a uniform pick from a size list. The exponent
+        # is what keeps the field mostly tiny with a few large beads, which is
+        # how water actually distributes itself across a panel.
+        r = 1.8 + (rnd.random() ** 2.7) * rmax
+        if bias:
+            # Left-edge beads fade out so they never fight the type.
+            edge = min(1.0, (x / (w * 0.42)) ** 1.4)
+            op = round(rnd.uniform(0.55, 1.0) * (0.22 + 0.78 * edge), 3)
+        else:
+            op = round(rnd.uniform(0.45, 0.85), 3)
         drops.append((x, y, r, op))
 
     # Painter's order: big beads behind small, so overlaps read as depth.
     drops.sort(key=lambda d: -d[2])
 
     for x, y, r, op in drops:
+        ry = r * 0.86                      # a dome, not a sphere
         g = [f'<g opacity="{op}">']
-        g.append(f'<ellipse cx="{x + r*0.10:.1f}" cy="{y + r*0.20:.1f}" '
-                 f'rx="{r*1.05:.1f}" ry="{r*0.95:.1f}" fill="url(#shadow)"/>')
-        g.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="url(#bead)"/>')
-        if r > 6:
-            g.append(f'<ellipse cx="{x - r*0.33:.1f}" cy="{y - r*0.38:.1f}" '
-                     f'rx="{r*0.26:.1f}" ry="{r*0.20:.1f}" fill="#ffffff" '
-                     f'opacity="0.80" filter="url(#soft)"/>')
-            g.append(f'<ellipse cx="{x + r*0.34:.1f}" cy="{y + r*0.36:.1f}" '
-                     f'rx="{r*0.20:.1f}" ry="{r*0.15:.1f}" fill="{GLOSS}" '
-                     f'opacity="0.55" filter="url(#soft)"/>')
+        # Contact shadow: tight, and just below, so the bead sits on the paint.
+        # Drawn wider than the bead — against the hero's blue glow a shadow the
+        # same size as the bead disappears under it and the field floats.
+        g.append(f'<ellipse cx="{x:.1f}" cy="{y + ry*0.34:.1f}" '
+                 f'rx="{r*1.24:.1f}" ry="{ry*1.00:.1f}" fill="url(#shadow)"/>')
+        g.append(f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="{r:.1f}" '
+                 f'ry="{ry:.1f}" fill="url(#bead)"/>')
+        if r > 4.5:
+            # The refraction crescent, low and opposite the key light. An
+            # ellipse rather than an arc: at this scale it reads identically
+            # and costs a fraction of the path data.
+            g.append(f'<ellipse cx="{x + r*0.14:.1f}" cy="{y + ry*0.58:.1f}" '
+                     f'rx="{r*0.56:.1f}" ry="{ry*0.15:.1f}" fill="{GLOSS_HI}" '
+                     f'opacity="0.34" filter="url(#melt)"/>')
+            g.append(f'<ellipse cx="{x - r*0.34:.1f}" cy="{y - ry*0.40:.1f}" '
+                     f'rx="{r*0.20:.1f}" ry="{ry*0.15:.1f}" fill="#ffffff" '
+                     f'opacity="0.78" filter="url(#soft)"/>')
         else:
-            g.append(f'<circle cx="{x - r*0.28:.1f}" cy="{y - r*0.32:.1f}" '
-                     f'r="{max(0.7, r*0.24):.1f}" fill="#ffffff" opacity="0.75"/>')
+            # Below about 4px the crescent is sub-pixel; one lit dot is all
+            # that survives, and it is enough to read as water.
+            g.append(f'<circle cx="{x - r*0.30:.1f}" cy="{y - ry*0.34:.1f}" '
+                     f'r="{max(0.55, r*0.30):.1f}" fill="#ffffff" opacity="0.70"/>')
         g.append('</g>')
         parts.append("".join(g))
 
@@ -172,6 +219,15 @@ def main():
     written = []
     p = OUT / "hero-beads.svg"
     p.write_text(beads(), encoding="utf-8")
+    written.append(p)
+
+    # Portrait variant. A phone crops a tall narrow slice, and `cover` on the
+    # landscape file scales it about 1.9x — so a handful of enormous beads fill
+    # the band and the rest of the field is never seen. Drawn to the shape it
+    # is actually displayed at, with smaller beads to survive the upscale.
+    p = OUT / "hero-beads-tall.svg"
+    p.write_text(beads(w=560, h=1200, n=300, seed=11, rmax=12.0, bias=False),
+                 encoding="utf-8")
     written.append(p)
 
     for name, paths in MARKS.items():

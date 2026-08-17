@@ -864,8 +864,12 @@ body.nav-open .sticky-cta { display: none; }
   background-image:
     linear-gradient(to right,
       oklch(0.175 0.022 260 / 0.93) 0%,
-      oklch(0.175 0.022 260 / 0.68) 42%,
-      oklch(0.175 0.022 260 / 0.22) 100%),
+      oklch(0.175 0.022 260 / 0.74) 42%,
+      /* Not lower than this: the trust labels are the smallest type on the
+         page and they run right across the band, so the far end of the ramp
+         still has to hold them at 4.5:1 over a bead highlight. Measured, not
+         guessed — see the contrast check noted in assets/media/README.md. */
+      oklch(0.175 0.022 260 / 0.42) 100%),
     url('assets/media/hero-beads.svg');
   background-size: cover, cover;
   background-position: center, center;
@@ -873,6 +877,43 @@ body.nav-open .sticky-cta { display: none; }
 }
 /* The stock scrim would stack with the gradient above and flatten the beads. */
 .hero__scrim { opacity: 0.28; }
+
+/* The same treatment for the opening band of every other page.
+   Only index.html uses .hero; the 63 city, service and utility pages open on a
+   plain .band--steel — and those are the pages that ads and search actually
+   land on, so leaving them flat meant the artwork never reached the traffic
+   that matters. :first-child inside <main> is precisely the opening band, so
+   mid-page steel bands (specs, city lists, the steps strip) stay flat. */
+main > .band--steel:first-child {
+  background-image:
+    linear-gradient(to right,
+      oklch(0.175 0.022 260 / 0.97) 0%,
+      oklch(0.175 0.022 260 / 0.90) 44%,
+      oklch(0.175 0.022 260 / 0.62) 74%,
+      oklch(0.175 0.022 260 / 0.34) 100%),
+    url('assets/media/hero-beads.svg');
+  background-size: cover, cover;
+  /* Anchored right: that is the dense end of the artwork, and it is the side
+     these pages leave empty. The ramp is longer and more opaque than the
+     homepage's because this band carries far more copy over it. */
+  background-position: center, right center;
+  background-repeat: no-repeat;
+}
+@media (max-width: 700px) {
+  /* On a phone the band is barely wider than the copy, so a left-to-right ramp
+     has no side to fade towards. Switch to the portrait artwork and a flat,
+     lighter veil: the copy here is large and already well clear of the ground,
+     so the veil only has to take the edge off, not hide the field. */
+  main > .band--steel:first-child,
+  .hero {
+    background-image:
+      linear-gradient(to bottom,
+        oklch(0.175 0.022 260 / 0.72) 0%,
+        oklch(0.175 0.022 260 / 0.80) 100%),
+      url('assets/media/hero-beads-tall.svg');
+    background-position: center, center top;
+  }
+}
 
 /* Tile marks: oversized line art, bottom-right, cropped by the tile edge so it
    reads as a watermark rather than a centred icon. Sits under the gradient and
